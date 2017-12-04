@@ -9,6 +9,23 @@ const app = express();
 app.use(bodyParser.json()); 
 module.exports = router;
 
+router.get('/milage', async function (req, res, next) {
+    let vehicle = await req.dbWorker.findById(req.query.vehicleId);
+
+    if (vehicle) {
+        let coords = await req.dbWorker.getCoords(req.query.vehicleId);
+
+        if (coords.length < 2)
+            res.end(JSON.stringify(0));
+        else {
+            let distance = geolib.getPathLength(coords);
+            res.end(JSON.stringify(distance));
+        }
+    }
+    else
+        forwardError(next, 404);
+});
+
 router.post('/readAll',async function(req,res,next){
     let result = await db.vehicles.findAll({
         where:
