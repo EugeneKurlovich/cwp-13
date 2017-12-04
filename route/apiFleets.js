@@ -25,6 +25,7 @@ let result = await db.fleets.findAll();
 router.post('/read',async function(req,res,next){
     console.log(req.body.id);
 let result = await db.fleets.findById(req.body.id);
+
   if (result !== undefined)
     {
         res.send(JSON.stringify(result));
@@ -32,6 +33,21 @@ let result = await db.fleets.findById(req.body.id);
     else
     {
         res.end('ERROR 404');
+    }
+
+res.send(result);
+});
+
+router.post('/create',async function(req,res,next){
+let result = await db.fleets.create(req.body);
+
+  if (result !== undefined)
+    {
+        res.send(JSON.stringify(result));
+    }
+    else
+    {
+        res.end('ERROR CREATE');
     }
 
 res.send(result);
