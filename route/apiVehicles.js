@@ -48,13 +48,13 @@ router.post('/read',async function(req,res,next){
 router.post('/create',async function(req,res,next){
     let result = await db.vehicles.create(req.body);
 
-    if (result.length !== 0)
+    if (result !== undefined)
     {
         res.send(JSON.stringify(result));
     }
     else
     {
-        res.end('ERROR 404');
+        res.end('ERROR CREATE');
     }
 });
 
@@ -67,7 +67,24 @@ router.post('/update',async function(req,res,next){
             }
         });
 
-    if (result.length !== 0)
+    if (result !== undefined)
+    {
+        res.send(JSON.stringify(result));
+    }
+    else
+    {
+        res.end('ERROR 404');
+    }
+});
+
+router.post('/delete',async function(req,res,next){
+    let result = await db.vehicles.destroy({
+            where: {
+                id: req.body.id
+            }
+    });
+
+    if (result !== undefined)
     {
         res.send(JSON.stringify(result));
     }
