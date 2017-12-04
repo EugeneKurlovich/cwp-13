@@ -34,8 +34,6 @@ let result = await db.fleets.findById(req.body.id);
     {
         res.end('ERROR 404');
     }
-
-res.send(result);
 });
 
 router.post('/create',async function(req,res,next){
@@ -49,9 +47,26 @@ let result = await db.fleets.create(req.body);
     {
         res.end('ERROR CREATE');
     }
-
-res.send(result);
 });
+
+router.post('/update',async function(req,res,next){
+    let result = await db.fleets.update(
+        req.body,
+        {
+            where: {
+                id: req.body.id
+            }
+        });
+    
+      if (result !== undefined)
+        {
+            res.send(JSON.stringify(req.body));
+        }
+        else
+        {
+            res.end('ERROR 400');
+        }  
+    });
 
 
 
