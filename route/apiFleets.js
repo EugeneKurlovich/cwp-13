@@ -68,7 +68,22 @@ router.post('/update',async function(req,res,next){
         }  
     });
 
-
+    router.post('/delete',async function(req,res,next){
+      let result = await db.fleets.destroy({
+                where: {
+                    id: req.body.id
+                }
+            });
+        
+          if (result !== undefined)
+            {
+                res.send(JSON.stringify(req.body.id));
+            }
+            else
+            {
+                res.end('ERROR 400');
+            }  
+        });
 
 module.exports = router;
 
