@@ -6,7 +6,7 @@ const router = express.Router();
 const db = require('../models')(Sequelize, config);
 
 const app = express();
-app.use(bodyParser.json() ); 
+app.use(bodyParser.json()); 
 
 
 router.get('/readAll',async function(req,res,next){

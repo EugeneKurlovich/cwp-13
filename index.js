@@ -7,7 +7,11 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 const fleets_controller = require('./route/apiFleets');
+const vehicles_controller = require('./route/apiVehicles');
+
+
 app.use('/api/fleets', fleets_controller);
+app.use('/api/vehicles', vehicles_controller);
 
 app.listen(3000, () => {
   WorkWork();
