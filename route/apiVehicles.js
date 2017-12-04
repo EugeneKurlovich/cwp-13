@@ -57,3 +57,22 @@ router.post('/create',async function(req,res,next){
         res.end('ERROR 404');
     }
 });
+
+router.post('/update',async function(req,res,next){
+    let result = await db.vehicles.update(
+        req.body,
+        {
+            where: {
+                id: req.body.id
+            }
+        });
+
+    if (result.length !== 0)
+    {
+        res.send(JSON.stringify(result));
+    }
+    else
+    {
+        res.end('ERROR 404');
+    }
+});
