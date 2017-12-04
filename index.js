@@ -3,6 +3,8 @@ const Sequelize = require('sequelize');
 const app = express();
 const config = require('./config.json');
 const db = require('./models')(Sequelize, config);
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
 const fleets_controller = require('./route/apiFleets');
 app.use('/api/fleets', fleets_controller);
