@@ -4,7 +4,7 @@ const config = require('../config.json');
 const Sequelize = require('sequelize');
 const router = express.Router();
 const db = require('../models')(Sequelize, config);
-
+let validatorController =  require('./validator');
 const app = express();
 app.use(bodyParser.json()); 
 
@@ -69,6 +69,9 @@ router.post('/update',async function(req,res,next){
     });
 
     router.post('/delete',async function(req,res,next){
+
+        if (req.body.id !== undefined)
+            {
       let result = await db.fleets.destroy({
                 where: {
                     id: req.body.id
@@ -82,7 +85,12 @@ router.post('/update',async function(req,res,next){
             else
             {
                 res.end('ERROR 400');
-            }  
+            } 
+        }
+        else
+        {
+            res.end("VALIDATION ERROR");
+        } 
         });
 
 module.exports = router;
