@@ -4,29 +4,52 @@ const config = require('../config.json');
 const Sequelize = require('sequelize');
 const router = express.Router();
 const db = require('../models')(Sequelize, config);
+const geolib = require('geolib');
 
 const app = express();
 app.use(bodyParser.json()); 
 module.exports = router;
 
-router.get('/milage', async function (req, res, next) {
-    let vehicle = await req.dbWorker.findById(req.query.vehicleId);
+router.post('/milage', async function (req, res, next) {
+    let vehicle = await db.vehicles.findAll({
+        where:
+    {
+        id:req.body.id
+    }
+    });
 
     if (vehicle) {
-        let coords = await req.dbWorker.getCoords(req.query.vehicleId);
+        let coords = await db.motions.findAll({
+            where:{
+              vehicleId:  req.body.id
+            }
+        });
 
-        if (coords.length < 2)
-            res.end(JSON.stringify(0));
+
+        let coordss = [];
+
+        coords.forEach((motion) => {
+            coordss.push(motion.latLng)
+        });
+
+        if (coordss.length < 2)
+        {
+            res.send(JSON.stringify(0));
+        }
+            
         else {
-            let distance = geolib.getPathLength(coords);
-            res.end(JSON.stringify(distance));
+            let distance = geolib.getPathLength(coordss);
+            res.send(JSON.stringify(distance));
         }
     }
     else
-        forwardError(next, 404);
+    {
+        res.send("ERROR 400");
+    }      
 });
 
 router.post('/readAll',async function(req,res,next){
+    console.log("qe");
     let result = await db.vehicles.findAll({
         where:
         {
@@ -34,7 +57,7 @@ router.post('/readAll',async function(req,res,next){
         }
     });
 
-    if (result.length !== 0)
+    if (result !== undefined)
     {
         res.send(JSON.stringify(result));
     }
@@ -52,7 +75,7 @@ router.post('/read',async function(req,res,next){
         }
     });
 
-    if (result.length !== 0)
+    if (result !== undefined)
     {
         res.send(JSON.stringify(result));
     }

@@ -14,7 +14,7 @@ router.get('/readAll',async function(req,res,next){
 let result = await db.fleets.findAll();
     if (result.length !== 0)
     {
-        res.send(JSON.stringify(result));
+        res.send(result);
     }
     else
     {
@@ -28,7 +28,7 @@ let result = await db.fleets.findById(req.body.id);
 
   if (result !== undefined)
     {
-        res.send(JSON.stringify(result));
+        res.send(result);
     }
     else
     {
